@@ -1,0 +1,33 @@
+body
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+
+html
+    font-size: 62.5%
+
+$bg-color: #ff0000
+$font-color: #111111
+@mixin flexprob
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+
+@mixin common-code
+    color: $font-color
+    
+
+.main-header
+    @include flexprob
+    width: 100vw
+    height: 100vh
+    background-color: $bg-color
+    h1
+        @include common-code
+        &:hover
+            $font-color: #001111
+    p
+        @include common-code
+        &:hover
+            $font-color: #001111
