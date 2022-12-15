@@ -1,0 +1,9 @@
+<button class="menu-nav btn" (click)="onMenuClick()">☰</button>
+<div [ngClass]="{'show' : show}" class="nav-container">
+  <div *ngFor="let item of menuItems" class="nav-btn btn btn-visit-loft">
+    <div class="menu-select">
+      ❇
+      <span class="nav-text">{{item}} </span>
+    </div>
+  </div>
+</div>
