@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './UI/menu/menu.component';
 import { HomeComponent } from './UI/home/home.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Home3DComponent } from './Three/home3-d/home3-d.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    HomeComponent
+    HomeComponent,
+    Home3DComponent
   ],
   imports: [
     BrowserModule,

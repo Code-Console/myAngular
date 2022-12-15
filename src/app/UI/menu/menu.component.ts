@@ -13,4 +13,7 @@ export class MenuComponent {
     this.show = !this.show;
     console.log("onMenuClick ~~~", this.show);
   }
+  onItemClick(item:AnimType){
+    console.log("item ~~~", item);
+  }
 }

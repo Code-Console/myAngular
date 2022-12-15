@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faFacebook,faGithub,faSkype } from '@fortawesome/free-brands-svg-icons';
+import { faDev,faGithub,faSkype,faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
   
 @Component({
@@ -8,7 +8,8 @@ import { faFacebook,faGithub,faSkype } from '@fortawesome/free-brands-svg-icons'
   styleUrls: ['./home.component.sass']
 })
 export class HomeComponent {
-  faFacebookF = faFacebook;
+  faFacebookF = faDev;
   faGit = faGithub;
   faSkype=faSkype;
+  faLinkedin = faLinkedin;
 }
