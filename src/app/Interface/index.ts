@@ -13,3 +13,8 @@ export enum AnimType {
   FACE_SELECTION = "Face Selection",
   STRIP_GLOBE = "Strip Globe",
 }
+
+export interface IShader {
+  vertex: string;
+  fragment: string;
+}

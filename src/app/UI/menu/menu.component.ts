@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { AnimType } from "src/app/interface";
+import { AnimType } from "src/app/Interface";
 
 @Component({
   selector: "app-menu",

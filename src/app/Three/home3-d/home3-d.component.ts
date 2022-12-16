@@ -8,6 +8,9 @@ import {
 } from "@angular/core";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { Waves } from "./Waves";
+import { Galaxy } from "./Galaxy";
 interface Morph {
   mesh: THREE.Mesh;
   speed: number;
@@ -26,6 +29,9 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
   clock = new THREE.Clock();
   morphs: Morph[] = [];
   mixer!: THREE.AnimationMixer;
+  wave!: Waves;
+  galaxy!:Galaxy;
+  controls!:OrbitControls;
   addMorph(
     mesh: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
     clip: THREE.AnimationClip,
@@ -87,6 +93,9 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
         morph.mesh.position.x = -1000 - Math.random() * 500;
       }
     });
+    this.wave.render();
+    this.galaxy.render();
+    this.controls?.update();
   }
   createScene() {
     this.scene = new THREE.Scene();
@@ -94,7 +103,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      10000
     );
     const light = new THREE.AmbientLight(0x404040, 3); // soft white light
     this.scene.add(light);
@@ -103,6 +112,13 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     this.camera.position.set(0, 0, 10);
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas() });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.scene.fog = new THREE.FogExp2(0x000000, 0.0015);
+    // const plan = new THREE.Mesh(new THREE.PlaneGeometry(10,10),new THREE.MeshBasicMaterial());
+    // this.scene.add(plan);
+    // plan.rotation.set(-Math.PI*.5,0,0);
+    // this.camera.position.set(0,0,-10);
+    // this.camera.lookAt(0, 10, 0);
+
     const gltfloader = new GLTFLoader();
     this.mixer = new THREE.AnimationMixer(this.scene);
     const game = this;
@@ -111,20 +127,20 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
       function (gltf) {
         const mesh = gltf.scene.children[0] as THREE.Mesh;
         const clip = gltf.animations[0];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 0; i++) {
           game.addMorph(
             mesh.clone(),
             clip,
-            300+Math.random()*300,
+            300 + Math.random() * 300,
             10,
             1000 - Math.random() * 2000,
             300 - Math.random() * 600,
             -500 + Math.random() * 100,
-            
+
             true
           );
         }
-        game.addMorph(mesh, clip, 500, 10, 0, 0, -500, false);
+        // game.addMorph(mesh, clip, 500, 10, 0, 0, -500, false);
       }
     );
     gltfloader.load(
@@ -136,18 +152,22 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
           game.addMorph(
             mesh.clone(),
             clip,
-            300+Math.random()*300,
+            300 + Math.random() * 300,
             10,
             1000 - Math.random() * 2000,
-            300 - Math.random() * 600,
+            -Math.random() * 600,
             -500 + Math.random() * 100,
-            
+
             true
           );
         }
         game.addMorph(mesh, clip, 400, 10, 50, 350, -500, true);
       }
     );
+    this.wave = new Waves();
+    this.scene.add(this.wave.particles);
+    this.galaxy = new Galaxy(this.scene);
+    this.controls = new OrbitControls( this.camera, this.renderer.domElement );
     this.onWindowResize = this.onWindowResize.bind(this);
     window.addEventListener("resize", this.onWindowResize);
   }
@@ -180,5 +200,6 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    
   }
 }
