@@ -1,11 +1,12 @@
+$tw-bg-opacity: 1
+$colorback: rgb(34 34 34/($tw-bg-opacity))
 .main-content
     display: flex
     flex-direction: column
     justify-content: center
     align-items: center
     height: 99vh
-    width: 900px
-    background-color: red
+    max-width: 900px
     position: absolute
     left: 50%
     transform: translateX(-50%)
@@ -20,8 +21,7 @@
         margin-bottom: 20px
         .list_inner
             padding: 10px
-            --tw-bg-opacity: 1
-            background-color: rgb(34 34 34/var(--tw-bg-opacity))
+            background-color: $colorback
             border-radius: 10px
     li a
         text-decoration: none
@@ -40,15 +40,53 @@
     .left
         padding-right: 50px
         width: 50%
-        background: green
     .right
         padding-left: 50px
         width: 50%
-        background: pink
+        margin-top: 20px
         .nm-container
             display: flex
-            .li
+            li
                 width: 50%
+                margin-right: 10px
                 input
                     width: 100%
-                    margin: 10px
+                    border: none
+                    color: white
+        .last
+            background: $colorback
+            padding: 10px
+            border-radius: 10px
+            display: flex
+            justify-content: center
+            margin-right: 10px
+            textarea
+                width: 100%
+                color: white
+                border: none
+    .edrea_tm_button
+        display: inline-block
+        border-radius: 50px
+        background-color: #eb4a4c
+        padding: 10px 40px
+        text-align: center
+        font-family: Poppins,sans-serif
+        color: #eb4a4c
+        margin-top: 20px
+        a
+            text-decoration: none
+            color: #fff
+
+@media (max-width: 580px)
+    .main-content
+        left: 0
+        transform: translateX(0)
+        margin: 20px
+        .wrapper
+            flex-direction: column
+        .left
+            padding-right: 0px
+            width: 100%
+        .right
+            padding-left: 0px
+            width: 100%
