@@ -20,7 +20,7 @@ export const wavesShader: IShader = {
         vUv = uv ;
         vPosition = position;
         vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-        gl_PointSize = scale * ( 300.0 / - mvPosition.z );
+        gl_PointSize = 3.;//scale * ( 300.0 / - mvPosition.z );
         gl_Position = projectionMatrix * mvPosition;
     }`,
   fragment: `
@@ -29,9 +29,10 @@ export const wavesShader: IShader = {
     varying vec3 vPosition;
     void main() {
         vec2 uv = vec2(abs(sin(vPosition.x)), abs(sin(vPosition.z)))*.5; 
+        vec2 uv2 = vec2(vPosition.x,vPosition.z)*.01; 
         vec2 uv1 = vec2(gl_PointCoord.x, 1. - gl_PointCoord.y); 
       if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
-      gl_FragColor = vec4( uv,0.5, 1.0 );
+      gl_FragColor = vec4(0.5,uv2.x,uv.y,1. );
   }`,
 };
 export const galaxyShader: IShader = {

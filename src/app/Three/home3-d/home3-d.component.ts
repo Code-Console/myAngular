@@ -8,9 +8,10 @@ import {
 } from "@angular/core";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Waves } from "./Waves";
 import { Galaxy } from "./Galaxy";
+import { parrotGLBPath } from "src/app/assets";
 interface Morph {
   mesh: THREE.Mesh;
   speed: number;
@@ -30,8 +31,9 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
   morphs: Morph[] = [];
   mixer!: THREE.AnimationMixer;
   wave!: Waves;
-  galaxy!:Galaxy;
-  controls!:OrbitControls;
+  galaxy!: Galaxy;
+  controls!: OrbitControls;
+
   addMorph(
     mesh: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
     clip: THREE.AnimationClip,
@@ -87,10 +89,22 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.render(this.scene, this.camera);
 
     this.mixer.update(delta * 10);
-    this.morphs.forEach((morph) => {
-      morph.mesh.position.x += morph.speed * delta * 1;
-      if (morph.mesh.position.x > 2000) {
-        morph.mesh.position.x = -1000 - Math.random() * 500;
+    this.morphs.forEach((morph,i) => {
+      morph.mesh.position.x += morph.speed * delta;
+
+      if(i==0){
+        morph.mesh.position.set(Math.sin(morph.speed)*100,350,Math.cos(morph.speed)*100);
+        morph.speed+=.5;
+        // morph.speed = 20;
+        const radian = morph.speed *(Math.PI/180);
+        morph.mesh.position.set(395*Math.sin(radian),0,-250+150*Math.cos(radian));
+        morph.mesh.rotation.set(0,(Math.PI*.5)+radian,0);
+        morph.mesh.scale.set(.5,.5,.5);
+      }
+
+      if (morph.mesh.position.x > 600) {
+        morph.mesh.position.x = -600;
+        morph.mesh.position.y = Math.random() * 300;
       }
     });
     this.wave.render();
@@ -99,75 +113,52 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   createScene() {
     this.scene = new THREE.Scene();
+    const geometry = new THREE.RingGeometry( 10, 9, 32 );
+    const material = new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } );
+    const mesh = new THREE.Mesh( geometry, material );
+    mesh.rotation.set(Math.PI*.5,0,0);
+    this.scene.add( mesh );
+
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      10000
+      1000
     );
     const light = new THREE.AmbientLight(0x404040, 3); // soft white light
     this.scene.add(light);
     const dDight = new THREE.DirectionalLight(0x404040); // soft white light
     this.scene.add(dDight);
-    this.camera.position.set(0, 0, 10);
+    this.camera.position.set(0, 0, 20);
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas() });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.scene.fog = new THREE.FogExp2(0x000000, 0.0015);
-    // const plan = new THREE.Mesh(new THREE.PlaneGeometry(10,10),new THREE.MeshBasicMaterial());
-    // this.scene.add(plan);
-    // plan.rotation.set(-Math.PI*.5,0,0);
-    // this.camera.position.set(0,0,-10);
-    // this.camera.lookAt(0, 10, 0);
-
     const gltfloader = new GLTFLoader();
     this.mixer = new THREE.AnimationMixer(this.scene);
     const game = this;
-    gltfloader.load(
-      "https://hututusoftwares.com/3D/Flamingo.glb",
-      function (gltf) {
-        const mesh = gltf.scene.children[0] as THREE.Mesh;
-        const clip = gltf.animations[0];
-        for (let i = 0; i < 0; i++) {
-          game.addMorph(
-            mesh.clone(),
-            clip,
-            300 + Math.random() * 300,
-            10,
-            1000 - Math.random() * 2000,
-            300 - Math.random() * 600,
-            -500 + Math.random() * 100,
+    gltfloader.load(parrotGLBPath, function (gltf) {
+      const mesh = gltf.scene.children[0] as THREE.Mesh;
+      const clip = gltf.animations[0];
+      for (let i = 0; i < 5; i++) {
+        game.addMorph(
+          mesh.clone(),
+          clip,
+          130 + Math.random() * 130,
+          8,
+          600 - Math.random() * 1200,
+          Math.random() * 300,
+          -400 + Math.random() * 30,
 
-            true
-          );
-        }
-        // game.addMorph(mesh, clip, 500, 10, 0, 0, -500, false);
+          true
+        );
       }
-    );
-    gltfloader.load(
-      "https://hututusoftwares.com/3D/Parrot.glb",
-      function (gltf) {
-        const mesh = gltf.scene.children[0] as THREE.Mesh;
-        const clip = gltf.animations[0];
-        for (let i = 0; i < 5; i++) {
-          game.addMorph(
-            mesh.clone(),
-            clip,
-            300 + Math.random() * 300,
-            10,
-            1000 - Math.random() * 2000,
-            -Math.random() * 600,
-            -500 + Math.random() * 100,
-
-            true
-          );
-        }
-        game.addMorph(mesh, clip, 400, 10, 50, 350, -500, true);
-      }
-    );
+      game.addMorph(mesh, clip, 400, 10, 50, 350, -500, true);
+    });
     this.wave = new Waves();
     this.scene.add(this.wave.particles);
     this.galaxy = new Galaxy(this.scene);
-    this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // this.controls.zoomO = 100;
     this.onWindowResize = this.onWindowResize.bind(this);
     window.addEventListener("resize", this.onWindowResize);
   }
@@ -200,6 +191,5 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    
   }
 }

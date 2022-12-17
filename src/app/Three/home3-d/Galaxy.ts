@@ -13,7 +13,7 @@ export class Galaxy {
 
   constructor(scene?: THREE.Scene) {
     this.mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(20512, 20512),
+      new THREE.PlaneGeometry(2048, 630),
       new THREE.ShaderMaterial({
         uniforms: this.uniforms,
         vertexShader: galaxyShader.vertex,
@@ -21,7 +21,7 @@ export class Galaxy {
       })
     );
     scene?.add(this.mesh);
-    this.mesh.position.set(0,0,-7000)
+    this.mesh.position.set(0,0,-400)
   }
   render() {
     this.uniforms.iTime.value += 0.01;
