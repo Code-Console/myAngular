@@ -9,6 +9,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Home3DComponent } from './Three/home3-d/home3-d.component';
 import { HeaderComponent } from './UI/header/header.component';
 import { ContactComponent } from './UI/contact/contact.component';
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './store/reducer';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { ContactComponent } from './UI/contact/contact.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    StoreModule.forRoot({count:counterReducer}, {})
   ],
   providers: [],
   bootstrap: [AppComponent]
