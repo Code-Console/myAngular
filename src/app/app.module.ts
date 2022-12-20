@@ -25,7 +25,7 @@ import { counterReducer } from './store/reducer';
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
-    StoreModule.forRoot({count:counterReducer}, {})
+    StoreModule.forRoot({state:counterReducer}, {})
   ],
   providers: [],
   bootstrap: [AppComponent]

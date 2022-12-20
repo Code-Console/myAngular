@@ -1,15 +1,14 @@
-<app-header></app-header>
 <div class="main-content home-bg">
   <span class="pre-title wow fadeIn" data-wow-duration="2s" data-wow-delay=".5s"
     >HELLO,</span
   >
   <h2 class="wow fadeIn" data-wow-duration="3s" data-wow-delay="1s">
-    <span class="gradient-text">I'M Yogesh Bangar</span>
+    <span class="gradientText">I'M Yogesh Bangar</span>
   </h2>
-  <p class="post-title wow fadeIn" data-wow-duration="4s" data-wow-delay="1.5s">
+  <p class="post-title wow fadeIn" data-wow-duration="4s" data-wow-delay="1.5s" (click)="onSubmit()">
     WEBGL &amp; FRONT-END DEVELOPER
   </p>
-  <p class="detail wow fadeIn" data-wow-duration="4s" data-wow-delay="1.5s">
+  <p *ngIf="page === pageView.ABOUT" class="detail wow fadeIn" data-wow-duration="4s" data-wow-delay="1.5s">
     I am a full stack web developer based in Indore, India. This website is a
     personal project that serves as a portfolio. Built using Angular, three.js
     and blender. Feel free to contact me using the contact page or through one

@@ -20,5 +20,13 @@ export interface IShader {
 }
 export interface IState {
   count: number;
-  page: string;
+  page: PageView;
+}
+
+export enum PageView {
+  HOME = "HOME",
+  ABOUT = "ABOUT",
+  PORTFOLIO = "PORTFOLIO",
+  CONTACT = "CONTACT",
+  NEWS = "NEWS",
 }

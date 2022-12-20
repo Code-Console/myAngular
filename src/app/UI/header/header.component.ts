@@ -1,8 +1,13 @@
 import { Component } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { IState } from "src/app/Interface";
-import { increment, decrement, reset } from "src/app/store/action";
+import { IState, PageView } from "src/app/Interface";
+import {
+  increment,
+  decrement,
+  reset,
+  actionSetPage,
+} from "src/app/store/action";
 
 @Component({
   selector: "app-header",
@@ -10,8 +15,8 @@ import { increment, decrement, reset } from "src/app/store/action";
   styleUrls: ["./header.component.sass"],
 })
 export class HeaderComponent {
-  count = 0;
-  count$!: Observable<IState>;
+  pageView = PageView;
+  state$!: Observable<IState>;
   increment() {
     this.store.dispatch(increment());
   }
@@ -21,8 +26,11 @@ export class HeaderComponent {
   reset() {
     this.store.dispatch(reset());
   }
+  actionSetPage(page: PageView) {
+    this.store.dispatch(actionSetPage({ payload: page }));
+  }
 
-  constructor(private store: Store<{ count: IState }>) {
-    this.count$ = store.pipe(select("count"));
+  constructor(private store: Store<{ state: IState }>) {
+    this.state$ = store.pipe(select("state"));
   }
 }
