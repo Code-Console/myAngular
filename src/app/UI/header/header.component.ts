@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
+import { IState } from "src/app/Interface";
 import { increment, decrement, reset } from "src/app/store/action";
 
 @Component({
@@ -10,7 +11,7 @@ import { increment, decrement, reset } from "src/app/store/action";
 })
 export class HeaderComponent {
   count = 0;
-  count$!: Observable<number>;
+  count$!: Observable<IState>;
   increment() {
     this.store.dispatch(increment());
   }
@@ -21,7 +22,7 @@ export class HeaderComponent {
     this.store.dispatch(reset());
   }
 
-  constructor(private store: Store<{ count: number }>) {
+  constructor(private store: Store<{ count: IState }>) {
     this.count$ = store.pipe(select("count"));
   }
 }

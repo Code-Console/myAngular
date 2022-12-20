@@ -18,3 +18,7 @@ export interface IShader {
   vertex: string;
   fragment: string;
 }
+export interface IState {
+  count: number;
+  page: string;
+}
