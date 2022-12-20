@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
+import { basePath, logoImg } from "src/app/assets";
 import { IState, PageView } from "src/app/Interface";
 import {
   increment,
@@ -15,6 +16,8 @@ import {
   styleUrls: ["./header.component.sass"],
 })
 export class HeaderComponent {
+  baseURL = basePath;
+  logoURL = logoImg;
   pageView = PageView;
   state$!: Observable<IState>;
   increment() {

@@ -1,0 +1,49 @@
+
+.main-content
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    height: 100vh
+    max-width: 500px
+    max-height: 500px
+    transform: translate(-50%, -50%)
+    top: 44.0%
+    left: 50%
+    position: absolute
+    padding: 20px
+    border-radius: 10px
+
+.portfolio
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: center
+    align-content: center
+
+.item
+    width: 45%
+    margin: 10px
+    height: auto
+    border-radius: 10px
+@media (max-width: 580px)
+    .main-content
+        transform: translate(0, 0)
+        top: 15.0%
+        left: unset
+        max-height: 600px
+        .item
+            width: 45%
+            margin: 1px
+            height: auto
+@media (orientation: landscape) and (max-height: 576px)
+    .main-content
+        transform: translate(0, 0)
+        top: 50px
+        left: unset
+        max-width: unset
+        flex-wrap: unset
+        .item
+            width: 25%
+            margin: 1px
+            height: auto

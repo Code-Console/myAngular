@@ -18,10 +18,10 @@ export class HomeComponent {
   faSkype = faSkype;
   faLinkedin = faLinkedin;
   @Input() page: PageView | undefined;
-  @Output() onUpdate:EventEmitter<string> = new EventEmitter();
+  @Output() onChildUpdate:EventEmitter<string> = new EventEmitter();
   pageView = PageView;
   onSubmit(){
-    this.onUpdate.emit("New"+Math.random());
+    this.onChildUpdate.emit("New"+Math.random());
   }
   constructor() {
     console.log("bankName!!! ", this.page);

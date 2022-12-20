@@ -27,12 +27,13 @@ export const wavesShader: IShader = {
     uniform vec3 color;
     varying vec2 vUv;
     varying vec3 vPosition;
+    uniform float u_time;
     void main() {
         vec2 uv = vec2(abs(sin(vPosition.x)), abs(sin(vPosition.z)))*.5; 
         vec2 uv2 = vec2(vPosition.x,vPosition.z)*.01; 
         vec2 uv1 = vec2(gl_PointCoord.x, 1. - gl_PointCoord.y); 
       if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
-      gl_FragColor = vec4(0.5,uv2.x,uv.y,1. );
+      gl_FragColor = vec4(.5,abs(sin(uv2.x+u_time*.02)),abs(sin(uv2.y+u_time*.02)),1.);
   }`,
 };
 export const galaxyShader: IShader = {

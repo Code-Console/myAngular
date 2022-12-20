@@ -1,5 +1,6 @@
 <app-home3-d></app-home3-d>
 <app-header></app-header>
 <app-menu></app-menu>
-<app-home (onUpdate)="onUpdate($event)" *ngIf="(state$ | async)?.page === pageView.HOME||(state$ | async)?.page === pageView.ABOUT" [page]="(state$ | async)?.page"></app-home>
+<app-home (onChildUpdate)="onUpdate($event)" *ngIf="(state$ | async)?.page === pageView.HOME||(state$ | async)?.page === pageView.ABOUT" [page]="(state$ | async)?.page"></app-home>
 <app-contact *ngIf="(state$ | async)?.page === pageView.CONTACT"></app-contact>
+<app-portfolio *ngIf="(state$ | async)?.page === pageView.PORTFOLIO"></app-portfolio>

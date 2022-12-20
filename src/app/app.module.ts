@@ -11,6 +11,7 @@ import { HeaderComponent } from './UI/header/header.component';
 import { ContactComponent } from './UI/contact/contact.component';
 import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './store/reducer';
+import { PortfolioComponent } from './UI/portfolio/portfolio.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { counterReducer } from './store/reducer';
     HomeComponent,
     Home3DComponent,
     HeaderComponent,
-    ContactComponent
+    ContactComponent,
+    PortfolioComponent
   ],
   imports: [
     BrowserModule,

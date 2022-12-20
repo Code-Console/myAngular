@@ -13,7 +13,10 @@ export class Waves {
     console.log("Waves");
     this.createWave();
   }
-
+  uniforms = {
+    color: { value: new THREE.Color(0xffffff) },
+    u_time: { value: 0 },
+  };
   createWave() {
     const numParticles = AMOUNTX * AMOUNTY;
     this.positions = new Float32Array(numParticles * 3);
@@ -27,7 +30,8 @@ export class Waves {
         this.positions[i] =
           ix * SEPARATION * (AMOUNTY - iy) * (i % 2 == 0 ? 0.05 : -0.05);
         this.positions[i + 1] = 0; // y
-        this.positions[i + 2] = Math.floor(iy/2) * SEPARATION * 2 - (AMOUNTY * SEPARATION) / 2; // z
+        this.positions[i + 2] =
+          Math.floor(iy / 2) * SEPARATION * 2 - (AMOUNTY * SEPARATION) / 2; // z
 
         this.scales[j] = 2;
 
@@ -43,9 +47,7 @@ export class Waves {
     geometry.setAttribute("scale", new THREE.BufferAttribute(this.scales, 1));
 
     const material = new THREE.ShaderMaterial({
-      uniforms: {
-        color: { value: new THREE.Color(0xffffff) },
-      },
+      uniforms: this.uniforms,
       vertexShader: wavesShader.vertex,
       fragmentShader: wavesShader.fragment,
     });
@@ -58,7 +60,7 @@ export class Waves {
   render() {
     let i = 0,
       j = 0;
-
+    this.uniforms.u_time.value++;
     for (let ix = 0; ix < AMOUNTX; ix++) {
       for (let iy = 0; iy < AMOUNTY; iy++) {
         this.positions[i + 1] =

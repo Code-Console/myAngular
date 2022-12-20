@@ -23,3 +23,8 @@ export const img5ton = `${basePath}3D/fiveTone.jpg`;
 export const MADEOuterSans_Bold = `${basePath}3D/MADEOuterSans_Bold.json`;
 export const Lobster_Regular = `${basePath}3D/Lobster_Regular.json`;
 export const mobileBreakPoint = 820;
+
+export const  androidImg =`${basePath}3D/android.jpg`;
+export const  threeImg =`${basePath}3D/three.jpg`;
+export const  nodeImg =`${basePath}3D/node.jpg`;
+export const  gamesImg =`${basePath}3D/games.jpg`;
