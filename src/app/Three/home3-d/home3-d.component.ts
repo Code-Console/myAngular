@@ -12,6 +12,12 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Waves } from "./Waves";
 import { Galaxy } from "./Galaxy";
 import { parrotGLBPath } from "src/app/assets";
+import { Bow } from "./Bow";
+import { dealWithKeyboard } from "./Keyboard";
+import { TouchType } from "src/app/Interface";
+import { Road } from "./RoadLight/Road";
+import { RoadLight } from "./RoadLight";
+
 interface Morph {
   mesh: THREE.Mesh;
   speed: number;
@@ -32,8 +38,9 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
   mixer!: THREE.AnimationMixer;
   wave!: Waves;
   galaxy!: Galaxy;
+  bow!: Bow;
   controls!: OrbitControls;
-
+  roadLight!:RoadLight;
   addMorph(
     mesh: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
     clip: THREE.AnimationClip,
@@ -89,17 +96,25 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.render(this.scene, this.camera);
 
     this.mixer.update(delta * 10);
-    this.morphs.forEach((morph,i) => {
+    this.morphs.forEach((morph, i) => {
       morph.mesh.position.x += morph.speed * delta;
 
-      if(i==0){
-        morph.mesh.position.set(Math.sin(morph.speed)*100,350,Math.cos(morph.speed)*100);
-        morph.speed+=.5;
+      if (i == 0) {
+        morph.mesh.position.set(
+          Math.sin(morph.speed) * 100,
+          350,
+          Math.cos(morph.speed) * 100
+        );
+        morph.speed += 0.5;
         // morph.speed = 20;
-        const radian = morph.speed *(Math.PI/180);
-        morph.mesh.position.set(395*Math.sin(radian),0,-250+150*Math.cos(radian));
-        morph.mesh.rotation.set(0,(Math.PI*.5)+radian,0);
-        morph.mesh.scale.set(.5,.5,.5);
+        const radian = morph.speed * (Math.PI / 180);
+        morph.mesh.position.set(
+          395 * Math.sin(radian),
+          0,
+          -250 + 150 * Math.cos(radian)
+        );
+        morph.mesh.rotation.set(0, Math.PI * 0.5 + radian, 0);
+        morph.mesh.scale.set(0.5, 0.5, 0.5);
       }
 
       if (morph.mesh.position.x > 600) {
@@ -107,17 +122,22 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
         morph.mesh.position.y = Math.random() * 300;
       }
     });
-    this.wave.render();
-    this.galaxy.render();
+    this.wave?.render();
+    this.galaxy?.render();
+    this.bow?.render(delta);
     this.controls?.update();
+    this.roadLight?.render(delta);
   }
   createScene() {
     this.scene = new THREE.Scene();
-    const geometry = new THREE.RingGeometry( 10, 9, 32 );
-    const material = new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } );
-    const mesh = new THREE.Mesh( geometry, material );
-    mesh.rotation.set(Math.PI*.5,0,0);
-    this.scene.add( mesh );
+    // const geometry = new THREE.RingGeometry(10, 9, 32);
+    // const material = new THREE.MeshBasicMaterial({
+    //   color: 0xffff00,
+    //   side: THREE.DoubleSide,
+    // });
+    // const mesh = new THREE.Mesh(geometry, material);
+    // mesh.rotation.set(Math.PI * 0.5, 0, 0);
+    // this.scene.add(mesh);
 
     this.camera = new THREE.PerspectiveCamera(
       75,
@@ -139,7 +159,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     gltfloader.load(parrotGLBPath, function (gltf) {
       const mesh = gltf.scene.children[0] as THREE.Mesh;
       const clip = gltf.animations[0];
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 0; i++) {
         game.addMorph(
           mesh.clone(),
           clip,
@@ -152,19 +172,34 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
           true
         );
       }
-      game.addMorph(mesh, clip, 400, 10, 50, 350, -500, true);
+      // game.addMorph(mesh, clip, 400, 10, 50, 350, -500, true);
     });
-    this.wave = new Waves();
-    this.scene.add(this.wave.particles);
-    this.galaxy = new Galaxy(this.scene);
-    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // this.wave = new Waves();
+    // this.scene.add(this.wave.particles);
+    // this.galaxy = new Galaxy(this.scene);
+    
+    this.bow = new Bow(this.scene);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.roadLight = new RoadLight(this);
     // this.controls.zoomO = 100;
-    this.onWindowResize = this.onWindowResize.bind(this);
-    window.addEventListener("resize", this.onWindowResize);
   }
+  addEventListeners() {
+    this.onWindowResize = this.onWindowResize.bind(this);
+    document.addEventListener("keydown", dealWithKeyboard);
 
+    document.addEventListener("mousedown", this.eventDown);
+    document.addEventListener("touchstart", this.eventDown);
+
+    document.addEventListener("mousemove", this.eventMove);
+    document.addEventListener("touchmove", this.eventMove);
+
+    document.addEventListener("mouseup", this.eventUp);
+    document.addEventListener("touchend", this.eventUp);
+
+    window.addEventListener("resize", this.onWindowResize, false);
+  }
   constructor() {
-    console.log("~~~~~~constructor~~~~~~~~");
+    dealWithKeyboard(0);
   }
   ngOnDestroy(): void {
     console.log("~~~~~~ngOnDestroy~~~~~~~~");
@@ -192,4 +227,16 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
   }
+
+  eventDown(e: any) {
+    this.touchEvent(e, TouchType.touchDown, 0);
+  }
+  eventMove(e: any) {
+    this.touchEvent(e, TouchType.touchMove, 0);
+  }
+  eventUp(e: any) {
+    this.touchEvent(e, TouchType.touchUp, 0);
+  }
+
+  touchEvent(e: any, type: TouchType, sys: Number) {}
 }

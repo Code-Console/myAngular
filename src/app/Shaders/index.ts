@@ -1,5 +1,5 @@
 import { IShader } from "../Interface";
-
+import * as THREE from "three";
 export const basicShader: IShader = {
   vertex: `
         void main() {
