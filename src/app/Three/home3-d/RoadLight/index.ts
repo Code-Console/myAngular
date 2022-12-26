@@ -11,8 +11,9 @@ export class RoadLight {
     fogNear: { type: string; value: any };
     fogFar: { type: string; value: any };
   };
-    leftCarLights!: CarLights;
-    rightCarLights!: CarLights;
+  leftCarLights!: CarLights;
+  rightCarLights!: CarLights;
+  position = new THREE.Vector3(0, -10, 40);
   constructor(_home: Home3DComponent) {
     this.home = _home;
     const options = {
@@ -71,35 +72,36 @@ export class RoadLight {
         rightCars: [0xdadafa, 0xbebae3, 0x8f97e4],
         sticks: 0xdadafa,
       },
+      position: [0, -20, 20],
     };
     let fog = new THREE.Fog(
-        options.colors.background,
-        options.length * 0.2,
-        options.length * 500
-      );
-      this.home.scene.fog = fog;
-      this.fogUniforms = {
-        fogColor: { type: "c", value: fog.color },
-        fogNear: { type: "f", value: fog.near },
-        fogFar: { type: "f", value: fog.far },
-      };
+      options.colors.background,
+      options.length * 0.2,
+      options.length * 500
+    );
+    this.home.scene.fog = fog;
+    this.fogUniforms = {
+      fogColor: { type: "c", value: fog.color },
+      fogNear: { type: "f", value: fog.near },
+      fogFar: { type: "f", value: fog.far },
+    };
     this.road = new Road(this.home, options);
     this.leftCarLights = new CarLights(
-        this.home,
-        options,
-        options.colors.leftCars,
-        options.movingAwaySpeed,
-        new THREE.Vector2(0, 1 - options.carLightsFade),
-        this
-      );
-      this.rightCarLights = new CarLights(
-        this.home,
-        options,
-        options.colors.rightCars,
-        options.movingCloserSpeed,
-        new THREE.Vector2(1, 0 + options.carLightsFade),
-        this
-      );
+      this.home,
+      options,
+      options.colors.leftCars,
+      options.movingAwaySpeed,
+      new THREE.Vector2(0, 1 - options.carLightsFade),
+      this
+    );
+    this.rightCarLights = new CarLights(
+      this.home,
+      options,
+      options.colors.rightCars,
+      options.movingCloserSpeed,
+      new THREE.Vector2(1, 0 + options.carLightsFade),
+      this
+    );
   }
   render(delta: number) {
     this.road?.update(delta);

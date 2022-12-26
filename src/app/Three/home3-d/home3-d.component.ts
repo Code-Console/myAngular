@@ -180,7 +180,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.bow = new Bow(this.scene);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.roadLight = new RoadLight(this);
+    // this.roadLight = new RoadLight(this);
     // this.controls.zoomO = 100;
   }
   addEventListeners() {

@@ -134,7 +134,8 @@ export class CarLights {
     mesh.frustumCulled = false;
     this.webgl.scene.add(mesh);
     this.mesh = mesh;
-    this.mesh.position.set(0,0,20);
+    const pos = this.options.position as number[] || [0,0,0];
+    this.mesh.position.set(pos[0],pos[1],pos[2]);
   }
   update(time: number) {
     const uni = this.mesh?.material.uniforms as any;

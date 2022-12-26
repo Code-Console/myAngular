@@ -181,16 +181,18 @@ export class Road {
         options.distortion.getDistortion
       );
     };
-    const geometry1 = new THREE.BoxGeometry(100,100,100);
+    const geometry1 = new THREE.BoxGeometry(100, 100, 100);
     const material1 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.x = -Math.PI / 2;
     // Push it half further away
-    mesh.position.z = 20-options.length / 2;
+    const pos = (this.options.position as number[]) || [0, 0, 0];
     mesh.position.x +=
-      (this.options.islandWidth / 2 + options.roadWidth / 2) * side;
+      pos[0] + (this.options.islandWidth / 2 + options.roadWidth / 2) * side;
+    mesh.position.y = pos[1];
+    mesh.position.z = pos[2] - options.length / 2;
     this.webgl.scene.add(mesh);
-    console.log(mesh, "~~~~~~~~~~~~!!~~~~",mesh.position);
+    console.log(mesh, "~~~~~~~~~~~~!!~~~~", mesh.position);
     return mesh;
   }
   init() {
@@ -199,6 +201,6 @@ export class Road {
     this.island = this.createPlane(0, this.options.islandWidth, false);
   }
   update(time: number) {
-    this.uTime.value +=.01;
+    this.uTime.value += 0.01;
   }
 }
