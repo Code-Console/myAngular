@@ -13,7 +13,7 @@ import { Waves } from "./Waves";
 import { Galaxy } from "./Galaxy";
 import { parrotGLBPath } from "src/app/assets";
 import { Bow } from "./Bow";
-import { dealWithKeyboard } from "./Keyboard";
+import { dealWithKeyboard, EventList } from "./Keyboard";
 import { TouchType } from "src/app/Interface";
 import { Road } from "./RoadLight/Road";
 import { RoadLight } from "./RoadLight";
@@ -40,7 +40,8 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
   galaxy!: Galaxy;
   bow!: Bow;
   controls!: OrbitControls;
-  roadLight!:RoadLight;
+  roadLight!: RoadLight;
+  eventList!: EventList;
   addMorph(
     mesh: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
     clip: THREE.AnimationClip,
@@ -149,7 +150,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scene.add(light);
     const dDight = new THREE.DirectionalLight(0x404040); // soft white light
     this.scene.add(dDight);
-    this.camera.position.set(0, 0, 20);
+    this.camera.position.set(0, 0, 220);
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas() });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.scene.fog = new THREE.FogExp2(0x000000, 0.0015);
@@ -176,67 +177,41 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     // this.wave = new Waves();
     // this.scene.add(this.wave.particles);
-    // this.galaxy = new Galaxy(this.scene);
-    
+    this.galaxy = new Galaxy(this.scene);
+
     this.bow = new Bow(this.scene);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     // this.roadLight = new RoadLight(this);
     // this.controls.zoomO = 100;
+    this.eventList = new EventList(
+      this.callbackEventListeners,
+      this.renderer.domElement
+    );
   }
-  addEventListeners() {
-    this.onWindowResize = this.onWindowResize.bind(this);
-    document.addEventListener("keydown", dealWithKeyboard);
-
-    document.addEventListener("mousedown", this.eventDown);
-    document.addEventListener("touchstart", this.eventDown);
-
-    document.addEventListener("mousemove", this.eventMove);
-    document.addEventListener("touchmove", this.eventMove);
-
-    document.addEventListener("mouseup", this.eventUp);
-    document.addEventListener("touchend", this.eventUp);
-
-    window.addEventListener("resize", this.onWindowResize, false);
+  callbackEventListeners(events: any) {
+    
   }
   constructor() {
-    dealWithKeyboard(0);
+    this.onWindowResize = this.onWindowResize.bind(this);
+    this.callbackEventListeners = this.callbackEventListeners.bind(this);
+    window.addEventListener("resize", this.onWindowResize);
   }
   ngOnDestroy(): void {
-    console.log("~~~~~~ngOnDestroy~~~~~~~~");
     window.removeEventListener("resize", this.onWindowResize);
+    this.eventList?.removeEventListeners();
   }
   ngAfterViewInit(): void {
-    console.log("~~~~~~~ngAfterViewInit~~~~~~~", this.canvas());
     this.createScene();
     this.animate();
-
-    // throw new Error("Method not implemented.");
   }
   ngOnInit(): void {
     console.log("~~~~~~~ngOnInit~~~~~~~");
-
-    // throw new Error("Method not implemented.");
   }
   onWindowResize() {
-    console.log("~~~~~~~ngOnInit~~~~~~~", this.camera);
     const SCREEN_WIDTH = window.innerWidth;
     const SCREEN_HEIGHT = window.innerHeight;
-
     this.camera.aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
     this.camera.updateProjectionMatrix();
-
     this.renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
   }
-
-  eventDown(e: any) {
-    this.touchEvent(e, TouchType.touchDown, 0);
-  }
-  eventMove(e: any) {
-    this.touchEvent(e, TouchType.touchMove, 0);
-  }
-  eventUp(e: any) {
-    this.touchEvent(e, TouchType.touchUp, 0);
-  }
-
-  touchEvent(e: any, type: TouchType, sys: Number) {}
 }

@@ -106,8 +106,8 @@ export class Bow {
       this.arrow.visible = true;
     }
     // this.bow.position.set(k.sx, k.sy, k.sz);
-    this.bow.rotation.set(0, Math.PI * k.ry, Math.PI * k.rz);
-    if (k.reset) {
+    // this.bow.rotation.set(0, Math.PI * k.ry, Math.PI * k.rz);
+    if (k?.reset) {
       k.reset = false;
       this.action.reset();
     }
