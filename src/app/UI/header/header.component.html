@@ -28,10 +28,10 @@
         <span (click)="actionSetPage(pageView.PORTFOLIO)">Portfolio</span>
       </li>
       <li
-        [ngClass]="{ gradientText: (state$ | async)?.page === pageView.NEWS }"
+        [ngClass]="{ gradientText: (state$ | async)?.page === pageView.PLAY }"
         class="inline-block"
       >
-        <span (click)="actionSetPage(pageView.NEWS)">News</span>
+        <span (click)="actionSetPage(pageView.PLAY)">Play</span>
       </li>
       <li
         [ngClass]="{ gradientText: (state$ | async)?.page === pageView.CONTACT }"

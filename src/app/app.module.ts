@@ -12,6 +12,7 @@ import { ContactComponent } from './UI/contact/contact.component';
 import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './store/reducer';
 import { PortfolioComponent } from './UI/portfolio/portfolio.component';
+import { PlayComponent } from './UI/play/play.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PortfolioComponent } from './UI/portfolio/portfolio.component';
     Home3DComponent,
     HeaderComponent,
     ContactComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    PlayComponent
   ],
   imports: [
     BrowserModule,

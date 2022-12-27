@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    geolocation: any;
+    setKey: any;
+  }
+}
 export enum AnimType {
   MAKERS_FUND = "Makers Fund",
   BlockXYZ = "Block XYZ",
@@ -28,5 +34,10 @@ export enum PageView {
   ABOUT = "ABOUT",
   PORTFOLIO = "PORTFOLIO",
   CONTACT = "CONTACT",
-  NEWS = "NEWS",
+  PLAY = "PLAY",
+}
+export enum TouchType {
+  touchDown = "touchDown",
+  touchMove = "touchMove",
+  touchUp = "touchUp",
 }

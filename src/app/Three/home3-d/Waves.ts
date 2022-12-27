@@ -9,8 +9,10 @@ export class Waves {
   count = 0;
   positions!: Float32Array;
   scales!: Float32Array;
-  constructor() {
+  scene!: THREE.Scene;
+  constructor(scene: THREE.Scene) {
     console.log("Waves");
+    this.scene = scene;
     this.createWave();
   }
   uniforms = {
@@ -55,6 +57,7 @@ export class Waves {
     //
 
     this.particles = new THREE.Points(geometry, material);
+    this.scene.add(this.particles);
     return this.particles;
   }
   render() {
@@ -78,6 +81,6 @@ export class Waves {
     this.particles.geometry.attributes["position"].needsUpdate = true;
     this.particles.geometry.attributes["scale"].needsUpdate = true;
     this.count += 0.1;
-    this.particles.position.set(0, -50, -120);
+    this.particles.position.set(0, -50, 70);
   }
 }

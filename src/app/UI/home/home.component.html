@@ -43,4 +43,7 @@
       </li>
     </ul>
   </div>
+  <div *ngIf="page === pageView.HOME" class="box" (click)="actionSetPage(pageView.ABOUT)" >
+    <span style="padding-top: 5px;">Regarding</span>
+  </div>
 </div>

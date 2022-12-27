@@ -6,6 +6,10 @@ export const parrotGLBPath = `${basePath}3D/Parrot.glb`;
 export const flamingoGLBPath = `${basePath}3D/Flamingo.glb`;
 export const flowerGLBPath = `${basePath}3D/Flower.glb`;
 
+export const woodenBowGLB = `${basePath}3D/WoodenBow.glb`;
+export const woodenBowFBX = `${basePath}3D/WoodenBow.fbx`;
+export const woodenBowImg = `${basePath}3D/Bow.jpg`;
+
 export const watchGLBPath_1 =
   "https://static.inspify.io/Chopard/ar/asset/v4/278573-6027/278573-6027.glb";
 export const loadingGif = basePath + "3D/loading.gif";

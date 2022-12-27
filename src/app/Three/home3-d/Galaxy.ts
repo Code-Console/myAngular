@@ -13,7 +13,7 @@ export class Galaxy {
 
   constructor(scene?: THREE.Scene) {
     this.mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(2048, 630),
+      new THREE.PlaneGeometry(2048, 1024),
       new THREE.ShaderMaterial({
         uniforms: this.uniforms,
         vertexShader: galaxyShader.vertex,
