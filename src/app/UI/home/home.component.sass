@@ -1,10 +1,10 @@
 
-
 .main-content
     display: flex
     flex-direction: column
     justify-content: center
     align-items: center
+    background-color: #000000ee
     height: 100vh
     hr
         width: 70px
@@ -37,3 +37,25 @@
     position: absolute
     padding: 20px
     border-radius: 10px
+
+.box
+    --border-size: 1px
+    --border-angle: 0turn
+    width: 100px
+    height: 30px
+    margin-top: 20px
+    text-align: center
+    cursor: pointer
+    background-image: conic-gradient(from var(--border-angle),#213,#112 50%,#213), conic-gradient(from var(--border-angle), transparent 20%, #08f, #f03)
+    background-size: calc(100% - (var(--border-size) * 2)) calc(100% - (var(--border-size) * 2)), cover
+    background-position: center center
+    background-repeat: no-repeat
+    animation: bg-spin 3s linear infinite
+@keyframes bg-spin
+    to
+        --border-angle: 2turn
+
+@property --border-angle
+    syntax: "<angle>"
+    inherits: true
+    initial-value: 0turn

@@ -1,3 +1,5 @@
+# [Demo](https://code-console.github.io/myAngular/docs/)
+
 # MyAngular
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.3.
@@ -28,4 +30,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 # build code for git page
-ng build --output-path docs --base-href /myAngular/
+ng build --output-path docs --base-href /myAngular/docs/

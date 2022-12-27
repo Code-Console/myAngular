@@ -2,7 +2,7 @@ import { Action, createReducer, on } from "@ngrx/store";
 import { IState, PageView } from "../Interface";
 import { increment, decrement, reset, actionSetPage } from "./action";
 
-const initialState: IState = { count: 0, page: PageView.NEWS };
+const initialState: IState = { count: 0, page: PageView.HOME };
 const _counterReducer = createReducer(
   initialState,
   on(increment, (state) => ({ ...state, count: state.count + 1 })),

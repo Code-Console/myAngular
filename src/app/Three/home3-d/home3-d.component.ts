@@ -17,6 +17,7 @@ import { dealWithKeyboard, EventList } from "./Keyboard";
 import { TouchType } from "src/app/Interface";
 import { Road } from "./RoadLight/Road";
 import { RoadLight } from "./RoadLight";
+import { ExplodeAnimation } from "./ExplodeAnimation";
 
 interface Morph {
   mesh: THREE.Mesh;
@@ -42,6 +43,8 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
   controls!: OrbitControls;
   roadLight!: RoadLight;
   eventList!: EventList;
+  explodeAnimation!: ExplodeAnimation;
+
   addMorph(
     mesh: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
     clip: THREE.AnimationClip,
@@ -98,9 +101,9 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.mixer.update(delta * 10);
     this.morphs.forEach((morph, i) => {
-      morph.mesh.position.x += morph.speed * delta;
+      // morph.mesh.position.x += morph.speed * delta;
 
-      if (i == 0) {
+      if (i < 0) {
         morph.mesh.position.set(
           Math.sin(morph.speed) * 100,
           350,
@@ -117,7 +120,13 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
         morph.mesh.rotation.set(0, Math.PI * 0.5 + radian, 0);
         morph.mesh.scale.set(0.5, 0.5, 0.5);
       }
-
+      const dist = this.bow.getArrowPosition().distanceTo(morph.mesh.position);
+      if (dist < 40) {
+        this.explodeAnimation.reset(morph.mesh.position);
+        morph.mesh.position.x = Math.random() * 600 - 300;
+        morph.mesh.position.y = Math.random() * 300;
+        morph.mesh.position.z = -400 + Math.random() * 30;
+      }
       if (morph.mesh.position.x > 600) {
         morph.mesh.position.x = -600;
         morph.mesh.position.y = Math.random() * 300;
@@ -125,9 +134,10 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.wave?.render();
     this.galaxy?.render();
-    this.bow?.render(delta);
+    this.bow?.render(delta, this.eventList);
     this.controls?.update();
     this.roadLight?.render(delta);
+    this.explodeAnimation?.update();
   }
   createScene() {
     this.scene = new THREE.Scene();
@@ -146,7 +156,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
       0.1,
       1000
     );
-    const light = new THREE.AmbientLight(0x404040, 3); // soft white light
+    const light = new THREE.AmbientLight(0xffffff, 3); // soft white light
     this.scene.add(light);
     const dDight = new THREE.DirectionalLight(0x404040); // soft white light
     this.scene.add(dDight);
@@ -160,27 +170,27 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     gltfloader.load(parrotGLBPath, function (gltf) {
       const mesh = gltf.scene.children[0] as THREE.Mesh;
       const clip = gltf.animations[0];
-      for (let i = 0; i < 0; i++) {
+      for (let i = 0; i < 2; i++) {
         game.addMorph(
           mesh.clone(),
           clip,
           130 + Math.random() * 130,
           8,
-          600 - Math.random() * 1200,
+          Math.random() * 600-300,
           Math.random() * 300,
           -400 + Math.random() * 30,
 
           true
         );
       }
-      // game.addMorph(mesh, clip, 400, 10, 50, 350, -500, true);
+      game.addMorph(mesh, clip, 400, 10, -150, 150, -400, true);
     });
     // this.wave = new Waves();
     // this.scene.add(this.wave.particles);
     this.galaxy = new Galaxy(this.scene);
-
+    this.explodeAnimation = new ExplodeAnimation(this.scene);
     this.bow = new Bow(this.scene);
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     // this.roadLight = new RoadLight(this);
     // this.controls.zoomO = 100;
     this.eventList = new EventList(
@@ -188,9 +198,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
       this.renderer.domElement
     );
   }
-  callbackEventListeners(events: any) {
-    
-  }
+  callbackEventListeners(events: any) {}
   constructor() {
     this.onWindowResize = this.onWindowResize.bind(this);
     this.callbackEventListeners = this.callbackEventListeners.bind(this);

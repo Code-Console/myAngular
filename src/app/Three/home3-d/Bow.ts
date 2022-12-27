@@ -1,17 +1,20 @@
-import { woodenBowFBX } from "src/app/assets";
+import { woodenBowFBX, woodenBowImg } from "src/app/assets";
 import * as THREE from "three";
-import { Mesh } from "three";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { EventList } from "./Keyboard";
 
 export class Bow {
   mixer!: THREE.AnimationMixer;
   scene!: THREE.Scene;
   action!: THREE.AnimationAction;
   arrow!: THREE.Group;
-  arrowFire!: THREE.Group;
+  arrowFire: THREE.Group[] = [];
   counter = 0;
   bow = new THREE.Group();
   position = new THREE.Vector3(0, 0, -120);
+  isMouseDown = false;
+  rotY = 0;
+  rotZ = 0;
   constructor(scene: THREE.Scene) {
     this.scene = scene;
     const fBXLoader = new FBXLoader();
@@ -22,8 +25,18 @@ export class Bow {
       this.action.play();
       this.action.weight = 1;
       this.action.repetitions = 1;
-      this.action.setDuration(1);
+      this.action.setDuration(0.4);
       this.bow.add(object);
+      const textureLoader = new THREE.TextureLoader();
+      const map = textureLoader.load(woodenBowImg)
+      object.traverse((object: any) => {
+        if (!object["isSkinnedMesh"]) return;
+        if (object["material"].isMaterial) {
+          object["material"].map = map;
+          object["material"].needsUpdate = true;
+        }
+      });
+      console.log(object);
       this.createArrow();
     });
   }
@@ -56,18 +69,17 @@ export class Bow {
     this.arrow.add(mesh);
     this.arrow.position.set(-48, 30, 0);
     this.arrow.name = "Arrow";
-    this.arrowFire = this.arrow.clone();
     this.bow.add(this.arrow);
     this.scene.add(this.bow);
-    this.scene.add(this.arrowFire);
-    this.arrowFire.name = "arrowFire";
-
-    console.log(this.arrowFire, this.arrow);
-    // this.bow.position.set(0, 0, -120);
-    //-48,8
+    for (let i = 0; i < 5; i++) {
+      this.arrowFire.push(this.arrow.clone());
+      this.scene.add(this.arrowFire[i]);
+      this.arrowFire[i].name = "arrowFire";
+      this.arrowFire[i].visible = false;
+    }
   }
   power = (x: number) => x * x * 1.3;
-  render(delta: number) {
+  render(delta: number, eventList: EventList) {
     const k = window.setKey;
     if (!this.arrow) return;
     if (this.mixer) {
@@ -89,27 +101,80 @@ export class Bow {
       this.arrow.position.x = 162 - this.power(this.action.time * 1.4) * 280;
     }
     if (this.action.time > 0.595) {
-      // this.action.reset();
+      if (this.action.time < 7) {
+        this.setArrow();
+      }
+      this.action.time = 7;
     }
 
     if (this.action.time > 0.595) {
-      this.arrowFire.translateX(-10);
-      this.arrowFire.rotateOnAxis(new THREE.Vector3(0, 0, 1), 0.003);
       this.arrow.visible = false;
     } else {
-      const rot = new THREE.Quaternion();
-      this.arrow.getWorldQuaternion(rot);
-      const pos = new THREE.Vector3();
-      this.arrow.getWorldPosition(pos);
-      this.arrowFire.position.set(pos.x, pos.y, pos.z);
-      this.arrowFire.quaternion.copy(rot);
       this.arrow.visible = true;
     }
-    // this.bow.position.set(k.sx, k.sy, k.sz);
-    // this.bow.rotation.set(0, Math.PI * k.ry, Math.PI * k.rz);
+    this.arrowFire.forEach((arr) => {
+      if (arr.visible) {
+        arr.translateX(-20);
+        arr.rotateOnAxis(new THREE.Vector3(0, 0, 1), 0.003);
+      }
+    });
     if (k?.reset) {
       k.reset = false;
       this.action.reset();
     }
+
+    if (eventList.isMouseDown) {
+      if (this.isMouseDown == false) {
+        this.rotY = this.bow.rotation.y;
+        this.rotZ = this.bow.rotation.z;
+      }
+      const moveX = eventList.mouseDownPos.x - eventList.mouse.x;
+      const moveY = eventList.mouseDownPos.y - eventList.mouse.y;
+      this.bow.rotation.y = this.rotY - moveX * 2;
+      this.bow.rotation.z = this.rotZ - moveY * 2;
+
+      this.isMouseDown = true;
+    } else {
+      if (this.isMouseDown) {
+        if (this.action.time > 0.59) this.action.reset();
+      }
+      this.isMouseDown = false;
+    }
+    if (this.bow.rotation.y > -0.75) {
+      this.bow.rotation.y = -0.75;
+    }
+    if (this.bow.rotation.y < -2.55) {
+      this.bow.rotation.y = -2.55;
+    }
+    if (this.bow.rotation.z < -0.85) {
+      this.bow.rotation.z = -0.85;
+    }
+    if (this.bow.rotation.z > 0.65) {
+      this.bow.rotation.z = 0.65;
+    }
+  }
+  getArrowPosition() {
+    const pos = new THREE.Vector3();
+    this.arrowFire[0]?.children[0].getWorldPosition(pos);
+    return pos;
+  }
+  setArrow() {
+    const rot = new THREE.Quaternion();
+    this.arrow.getWorldQuaternion(rot);
+    const pos = new THREE.Vector3();
+    this.arrow.getWorldPosition(pos);
+
+    this.arrowFire.forEach((arr) => {
+      if (
+        !arr.visible ||
+        Math.abs(arr.position.z) > 400 ||
+        Math.abs(arr.position.x) > 600
+      ) {
+        console.log(arr.visible);
+        arr.position.copy(pos);
+        arr.quaternion.copy(rot);
+        arr.visible = true;
+      }
+    });
   }
 }
