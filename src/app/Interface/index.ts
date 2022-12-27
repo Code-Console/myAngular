@@ -34,7 +34,7 @@ export enum PageView {
   ABOUT = "ABOUT",
   PORTFOLIO = "PORTFOLIO",
   CONTACT = "CONTACT",
-  NEWS = "NEWS",
+  PLAY = "PLAY",
 }
 export enum TouchType {
   touchDown = "touchDown",

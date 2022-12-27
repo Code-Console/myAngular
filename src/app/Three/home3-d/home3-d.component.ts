@@ -185,8 +185,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       game.addMorph(mesh, clip, 400, 10, -150, 150, -400, true);
     });
-    // this.wave = new Waves();
-    // this.scene.add(this.wave.particles);
+    this.wave = new Waves(this.scene);
     this.galaxy = new Galaxy(this.scene);
     this.explodeAnimation = new ExplodeAnimation(this.scene);
     this.bow = new Bow(this.scene);

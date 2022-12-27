@@ -4,3 +4,4 @@
 <app-home (onChildUpdate)="onUpdate($event)" *ngIf="(state$ | async)?.page === pageView.HOME||(state$ | async)?.page === pageView.ABOUT" [page]="(state$ | async)?.page"></app-home>
 <app-contact *ngIf="(state$ | async)?.page === pageView.CONTACT"></app-contact>
 <app-portfolio *ngIf="(state$ | async)?.page === pageView.PORTFOLIO"></app-portfolio>
+<app-play *ngIf="(state$ | async)?.page === pageView.PLAY"></app-play>
