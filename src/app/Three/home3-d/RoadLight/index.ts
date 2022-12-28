@@ -57,7 +57,7 @@ export class RoadLight {
       // How drunk the driver is.
       // carWidthPercentage's max + carShiftX's max -> Cannot go over 1.
       // Or cars start going into other lanes
-      carShiftX: [-0.2, 0.2],
+      carShiftX: [-2.4, 2.4],
       // Self Explanatory
       carFloorSeparation: [0.05, 1],
 
@@ -72,7 +72,7 @@ export class RoadLight {
         rightCars: [0xdadafa, 0xbebae3, 0x8f97e4],
         sticks: 0xdadafa,
       },
-      position: [0, -20, 20],
+      position: [0, -20, 220],
     };
     let fog = new THREE.Fog(
       options.colors.background,
@@ -107,5 +107,12 @@ export class RoadLight {
     this.road?.update(delta);
     this.leftCarLights?.update(delta);
     this.rightCarLights?.update(delta);
+  }
+  setVisible(visible: boolean) {
+    this.road.leftRoadWay.visible = visible;
+    this.road.rightRoadWay.visible = visible;
+    this.road.island.visible = visible;
+    this.leftCarLights.mesh.visible = visible;
+    this.rightCarLights.mesh.visible = visible;
   }
 }

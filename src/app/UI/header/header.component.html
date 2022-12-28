@@ -1,10 +1,7 @@
 <div class="header_inner container">
   <div class="logo">
-    <a href="{{baseURL}}" target="_blank"
-      ><img
-        class="max-w-[80px]"
-        src="{{logoURL}}"
-        alt="" /></a
+    <a href="{{ baseURL }}" target="_blank"
+      ><img class="max-w-[80px]" src="{{ logoURL }}" alt="" /></a
     >hututusoftwares
   </div>
   <div class="menu">
@@ -22,7 +19,9 @@
         <span (click)="actionSetPage(pageView.ABOUT)">About</span>
       </li>
       <li
-        [ngClass]="{ gradientText: (state$ | async)?.page === pageView.PORTFOLIO }"
+        [ngClass]="{
+          gradientText: (state$ | async)?.page === pageView.PORTFOLIO
+        }"
         class="inline-block"
       >
         <span (click)="actionSetPage(pageView.PORTFOLIO)">Portfolio</span>
@@ -34,7 +33,17 @@
         <span (click)="actionSetPage(pageView.PLAY)">Play</span>
       </li>
       <li
-        [ngClass]="{ gradientText: (state$ | async)?.page === pageView.CONTACT }"
+        [ngClass]="{
+          gradientText: (state$ | async)?.page === pageView.HEADLIGHTS
+        }"
+        class="inline-block"
+      >
+        <span (click)="actionSetPage(pageView.HEADLIGHTS)">Headlights</span>
+      </li>
+      <li
+        [ngClass]="{
+          gradientText: (state$ | async)?.page === pageView.CONTACT
+        }"
         class="inline-block"
       >
         <span (click)="actionSetPage(pageView.CONTACT)">Contact</span>

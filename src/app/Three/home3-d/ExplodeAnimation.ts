@@ -1,4 +1,5 @@
 import { particleShader } from "src/app/Shaders";
+import { randomPN, randomPositive } from "src/app/util";
 import * as THREE from "three";
 export class ExplodeAnimation {
   movementSpeed = 10;
@@ -15,7 +16,7 @@ export class ExplodeAnimation {
   positions!: Float32Array;
   velocity!: Float32Array;
   uniforms = {
-    color: { value: new THREE.Color(0xffffff) },
+    color: { value: new THREE.Vector3(0, 1, 0) },
     u_time: { value: 0 },
   };
   constructor(scene: THREE.Scene) {
@@ -82,6 +83,21 @@ export class ExplodeAnimation {
         Math.random() * this.movementSpeed - this.movementSpeed / 2;
     }
     this.geometry.attributes["position"].needsUpdate = true;
-    if (pos) this.object.position.copy(pos);
+    if (pos) {
+      this.object.position.copy(pos);
+      this.uniforms.color.value = new THREE.Vector3(1, 0, 0);
+    } else {
+      this.uniforms.color.value = new THREE.Vector3(
+        randomPositive(1),
+        randomPositive(1),
+        randomPositive(1)
+      );
+      this.object.position.set(
+        randomPN(100),
+        50 + randomPN(50),
+        randomPN(100)
+      );
+      console.log(this.object.position);
+    }
   }
 }

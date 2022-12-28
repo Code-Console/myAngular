@@ -1,4 +1,4 @@
-body{margin:0;background-color:#181818!important;color:#fff!important}.gradientText{background-image:-webkit-linear-gradient(294deg,rgb(255,79,82) 0%,rgb(57,58,220) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}@charset "UTF-8";/*!
+@import"https://fonts.googleapis.com/css2?family=Chango&display=swap";body{margin:0;background-color:#181818!important;color:#fff!important}.gradientText{background-image:-webkit-linear-gradient(294deg,rgb(255,79,82) 0%,rgb(57,58,220) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.main-content{display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;max-width:500px;max-height:500px;transform:translate(-50%,-50%);top:44%;left:50%;position:absolute;padding:20px;border-radius:10px}@charset "UTF-8";/*!
 * Bootstrap  v5.2.3 (https://getbootstrap.com/)
 * Copyright 2011-2022 The Bootstrap Authors
 * Copyright 2011-2022 Twitter, Inc.

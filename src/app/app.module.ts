@@ -13,6 +13,7 @@ import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './store/reducer';
 import { PortfolioComponent } from './UI/portfolio/portfolio.component';
 import { PlayComponent } from './UI/play/play.component';
+import { HeadlightsComponent } from './UI/headlights/headlights.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { PlayComponent } from './UI/play/play.component';
     HeaderComponent,
     ContactComponent,
     PortfolioComponent,
-    PlayComponent
+    PlayComponent,
+    HeadlightsComponent
   ],
   imports: [
     BrowserModule,

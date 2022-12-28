@@ -28,7 +28,7 @@ export class Bow {
       this.action.setDuration(0.4);
       this.bow.add(object);
       const textureLoader = new THREE.TextureLoader();
-      const map = textureLoader.load(woodenBowImg)
+      const map = textureLoader.load(woodenBowImg);
       object.traverse((object: any) => {
         if (!object["isSkinnedMesh"]) return;
         if (object["material"].isMaterial) {
@@ -152,6 +152,12 @@ export class Bow {
     if (this.bow.rotation.z > 0.65) {
       this.bow.rotation.z = 0.65;
     }
+  }
+  setVisible(visible: boolean) {
+    this.bow.visible = visible;
+    this.arrowFire.forEach((arr) => {
+      arr.visible = false;
+    });
   }
   getArrowPosition() {
     const pos = new THREE.Vector3();

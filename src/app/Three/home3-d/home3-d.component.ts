@@ -13,11 +13,13 @@ import { Waves } from "./Waves";
 import { Galaxy } from "./Galaxy";
 import { parrotGLBPath } from "src/app/assets";
 import { Bow } from "./Bow";
-import { dealWithKeyboard, EventList } from "./Keyboard";
-import { TouchType } from "src/app/Interface";
-import { Road } from "./RoadLight/Road";
+import { EventList } from "./Keyboard";
 import { RoadLight } from "./RoadLight";
 import { ExplodeAnimation } from "./ExplodeAnimation";
+import { select, Store } from "@ngrx/store";
+import { IState, PageView } from "src/app/Interface";
+import { Observable } from "rxjs";
+import { randomPN } from "src/app/util";
 
 interface Morph {
   mesh: THREE.Mesh;
@@ -44,7 +46,8 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
   roadLight!: RoadLight;
   eventList!: EventList;
   explodeAnimation!: ExplodeAnimation;
-
+  object!: IState;
+  counter = 0;
   addMorph(
     mesh: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
     clip: THREE.AnimationClip,
@@ -132,24 +135,37 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
         morph.mesh.position.y = Math.random() * 300;
       }
     });
-    this.wave?.render();
-    this.galaxy?.render();
-    this.bow?.render(delta, this.eventList);
-    this.controls?.update();
-    this.roadLight?.render(delta);
     this.explodeAnimation?.update();
+    if (this.object.page === PageView.HEADLIGHTS) {
+      this.roadLight?.render(delta);
+      this.wave.particles.visible = false;
+      this.galaxy.mesh.visible = false;
+      this.bow.setVisible(false);
+      this.morphs.forEach((morph) => {
+        morph.mesh.visible = false;
+      });
+      this.roadLight?.setVisible(true);
+      if (this.counter % 100 === 0) {
+        this.explodeAnimation.reset();
+        console.log("!!!!!!!!!!!");
+      }
+    } else {
+      this.wave?.render();
+      this.galaxy?.render();
+      this.bow?.render(delta, this.eventList);
+      this.controls?.update();
+      this.wave.particles.visible = true;
+      this.galaxy.mesh.visible = true;
+      this.bow.setVisible(true);
+      this.morphs.forEach((morph) => {
+        morph.mesh.visible = true;
+      });
+      this.roadLight?.setVisible(false);
+    }
+    this.counter++;
   }
   createScene() {
     this.scene = new THREE.Scene();
-    // const geometry = new THREE.RingGeometry(10, 9, 32);
-    // const material = new THREE.MeshBasicMaterial({
-    //   color: 0xffff00,
-    //   side: THREE.DoubleSide,
-    // });
-    // const mesh = new THREE.Mesh(geometry, material);
-    // mesh.rotation.set(Math.PI * 0.5, 0, 0);
-    // this.scene.add(mesh);
-
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -176,7 +192,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
           clip,
           130 + Math.random() * 130,
           8,
-          Math.random() * 600-300,
+          Math.random() * 600 - 300,
           Math.random() * 300,
           -400 + Math.random() * 30,
 
@@ -190,7 +206,7 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     this.explodeAnimation = new ExplodeAnimation(this.scene);
     this.bow = new Bow(this.scene);
     // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    // this.roadLight = new RoadLight(this);
+    this.roadLight = new RoadLight(this);
     // this.controls.zoomO = 100;
     this.eventList = new EventList(
       this.callbackEventListeners,
@@ -198,7 +214,11 @@ export class Home3DComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
   callbackEventListeners(events: any) {}
-  constructor() {
+  constructor(store: Store<{ state: IState }>) {
+    store.select("state").subscribe((obj) => {
+      this.object = obj;
+    });
+
     this.onWindowResize = this.onWindowResize.bind(this);
     this.callbackEventListeners = this.callbackEventListeners.bind(this);
     window.addEventListener("resize", this.onWindowResize);

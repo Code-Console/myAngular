@@ -57,11 +57,8 @@ export const particleShader: IShader = {
         return sqrt(xB + yB);
       }
       void main() {
-          vec2 uv = vec2(abs(sin(vPosition.x)), abs(sin(vPosition.z)))*.5; 
-          vec2 uv2 = vec2(vPosition.x,vPosition.z)*.01; 
-          vec2 uv1 = vec2(gl_PointCoord.x, 1. - gl_PointCoord.y); 
         if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
-        gl_FragColor = vec4(1.,0.,0.,2./getDistance(vPosition.z, vPosition.x));
+        gl_FragColor = vec4(color,2./getDistance(vPosition.z, vPosition.x));
     }`,
   };
 export const galaxyShader: IShader = {
